@@ -3,10 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
 import time
+import os
 
 app = FastAPI()
 
-# ✅ CORS FIX (VERY IMPORTANT)
+# ✅ CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,34 +16,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Wait for DB connection
+# ✅ DB connection with retry using environment variables
 conn = None
 for i in range(10):
     try:
         conn = psycopg2.connect(
-            host="postgres-db",
-            database="waterproofing",
-            user="admin",
-            password="admin"
+            host=os.getenv("DB_HOST", "postgres"),
+            database=os.getenv("DB_NAME", "waterproofing"),
+            user=os.getenv("DB_USER", "postgres"),
+            password=os.getenv("DB_PASSWORD", "password")
         )
         print("Connected to DB ✅")
         break
-    except:
-        print("DB not ready, retrying...")
-        time.sleep(2)
+    except Exception as e:
+        print("DB not ready, retrying...", e)
+        time.sleep(3)
 
-cursor = conn.cursor()
-
-# Create table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS requests (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
-    phone TEXT,
-    issue TEXT
-)
-""")
-conn.commit()
+# ❗ Handle failure safely
+if conn:
+    cursor = conn.cursor()
+    # Create table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS requests (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        phone TEXT,
+        issue TEXT
+    )
+    """)
+    conn.commit()
+else:
+    print("❌ DB connection failed. Backend running without DB")
 
 # Request model
 class Request(BaseModel):
@@ -57,6 +61,8 @@ def home():
 
 @app.post("/submit")
 def submit_request(req: Request):
+    if not conn:
+        return {"error": "DB not connected"}
     cursor.execute(
         "INSERT INTO requests (name, phone, issue) VALUES (%s, %s, %s)",
         (req.name, req.phone, req.issue)
@@ -66,6 +72,8 @@ def submit_request(req: Request):
 
 @app.get("/requests")
 def get_requests():
+    if not conn:
+        return {"error": "DB not connected"}
     cursor.execute("SELECT * FROM requests")
     data = cursor.fetchall()
     return {"data": data}

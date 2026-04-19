@@ -1,244 +1,1121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Vigneshwara Enterprises</title>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vigneshawara Enterprises</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet" />
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --navy: #0e2150;
+            --navy-mid: #1a3a7a;
+            --blue-btn: #1d3f8a;
+            --blue-dark: #0d2248;
+            --gray-bg: #f0f2f5;
+            --gray-light: #f7f8fa;
+            --text-muted: #6b7280;
+            --text-dark: #111827;
+            --white: #ffffff;
+            --border: #e2e6ed;
+            --tag-blue: #d6e4f7;
+            --tag-blue-text: #1a4080;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background: #f4f6f9;
+            font-family: 'Barlow', sans-serif;
+            background: var(--gray-bg);
+            color: var(--text-dark);
+            font-size: 15px;
+            line-height: 1.6;
         }
 
-        header {
-            background: linear-gradient(90deg, #1e3c72, #2a5298);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 26px;
-            font-weight: bold;
+        /* NAV */
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 48px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .location {
-            text-align: center;
-            background: #fff;
-            padding: 10px;
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--navy);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
             font-size: 14px;
-            color: #555;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.2s;
         }
 
+        .nav-links a.active,
+        .nav-links a:hover { color: var(--navy); }
+
+        .nav-links a.active {
+            border-bottom: 2px solid var(--navy);
+            padding-bottom: 2px;
+        }
+
+        .btn-quote {
+            background: var(--blue-btn);
+            color: var(--white) !important;
+            padding: 9px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: background 0.2s;
+        }
+        .btn-quote:hover { background: var(--navy); }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* HERO */
         .hero {
-            background: url("https://images.unsplash.com/photo-1581090700227-1e8e75cbb3a0");
-            background-size: cover;
-            color: white;
-            padding: 120px 20px;
-            text-align: center;
+            background: var(--gray-light);
+            padding: 72px 48px 60px;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-left { flex: 1; max-width: 480px; }
+
+        .badge-label {
+            display: inline-block;
+            background: #e8edf7;
+            color: var(--navy);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 4px;
+            margin-bottom: 20px;
         }
 
         .hero h1 {
-            font-size: 40px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.05;
+            color: var(--navy);
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
         }
 
-        .section {
-            padding: 40px 20px;
+        .hero p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 32px;
+            max-width: 360px;
         }
 
-        .section h2 {
+        .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: var(--blue-btn); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--navy);
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1.5px solid var(--navy);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-outline:hover { background: var(--navy); color: var(--white); }
+
+        .hero-right { flex: 1; max-width: 400px; }
+
+        .hero-img-wrap {
+            border-radius: 16px;
+            overflow: hidden;
+            background: #1a3060;
+            aspect-ratio: 4/3.2;
+        }
+
+        .hero-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            mix-blend-mode: luminosity;
+            opacity: 0.85;
+        }
+
+        /* SERVICES SECTION */
+        .services-section {
+            padding: 60px 48px;
+            background: var(--white);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--navy);
+            border-bottom: 3px solid var(--navy);
+            padding-bottom: 6px;
+            display: inline-block;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            max-width: 340px;
+            text-align: right;
+            line-height: 1.6;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 2px;
+            background: var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 28px 26px;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        .service-card:hover { background: #f4f7fc; }
+
+        .service-card.featured {
+            grid-row: 1 / 3;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .service-card.featured img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .service-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gray-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .service-icon svg { width: 18px; height: 18px; color: var(--navy); }
+
+        .service-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .service-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .learn-more {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--navy);
+            text-decoration: none;
+        }
+
+        .stp-card { background: var(--gray-light); }
+
+        .tags { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+        .tag {
+            background: var(--tag-blue);
+            color: var(--tag-blue-text);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        /* CURRENT PROJECTS */
+        .projects-section {
+            padding: 60px 48px;
+            background: var(--gray-light);
+            border-top: 1px solid var(--border);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .project-card {
+            background: var(--white);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 24px 20px;
+            transition: box-shadow 0.2s;
+        }
+        .project-card:hover { box-shadow: 0 4px 16px rgba(14,33,80,0.08); }
+
+        .project-icon {
+            width: 36px;
+            height: 36px;
+            background: #e8edf7;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .project-status {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #25a244;
+            margin-bottom: 6px;
+        }
+
+        .project-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .project-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* STATS BAR */
+        .stats-bar {
+            padding: 48px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            border-right: 1px solid var(--border);
+        }
+        .stat-item:last-child { border-right: none; }
+
+        .stat-num {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 46px;
+            font-weight: 800;
+            color: var(--navy);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* CTA BANNER */
+        .cta-banner {
+            background: var(--navy);
+            padding: 64px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .cta-banner h2 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 12px;
+        }
+
+        .cta-banner p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            max-width: 440px;
+            line-height: 1.7;
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--navy);
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .btn-white:hover { opacity: 0.92; }
+
+        /* SERVICES PAGE */
+        .services-page { background: var(--gray-bg); }
+
+        .services-hero {
+            background: var(--gray-light);
+            padding: 72px 48px 60px;
+        }
+
+        .services-hero h1 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--navy);
+            line-height: 1.05;
+            margin-bottom: 16px;
+            max-width: 480px;
+        }
+
+        .services-hero-inner {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        .services-hero-left { flex: 1; }
+        .services-hero-right { flex: 1; position: relative; }
+
+        .hero-img-services {
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+        }
+
+        .hero-img-services img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .warranty-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--navy);
+            color: var(--white);
+            padding: 16px 22px;
+            border-radius: 8px;
             text-align: center;
         }
 
-        .services {
+        .warranty-badge .num {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .warranty-badge .label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .services-hero p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 380px;
+        }
+
+        .specialized {
+            padding: 60px 48px;
+            background: var(--white);
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 2px;
+            background: var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .ready-cta {
+            background: var(--navy);
+            margin: 48px;
+            border-radius: 16px;
+            padding: 60px 56px;
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            width: 280px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        .ready-cta h2 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 12px;
         }
 
-        form {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        .ready-cta p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            max-width: 380px;
         }
 
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+        .ready-cta-btns { display: flex; gap: 14px; }
+
+        .btn-outline-white {
+            background: transparent;
+            color: var(--white);
+            padding: 13px 26px;
             border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            background: #2a5298;
-            color: white;
-            padding: 12px;
-            border: none;
-            width: 100%;
-            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1.5px solid rgba(255,255,255,0.5);
             cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .btn-outline-white:hover { background: rgba(255,255,255,0.1); }
+
+        /* REQUESTS PAGE */
+        .requests-page {
+            padding: 60px 48px;
+            background: var(--gray-bg);
+            min-height: calc(100vh - 56px);
         }
 
-        button:hover {
-            background: #1e3c72;
+        .requests-page h2 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 8px;
         }
 
-        table {
-            width: 90%;
-            margin: auto;
-            border-collapse: collapse;
-            background: white;
+        .requests-page .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 36px;
         }
 
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 32px;
+            align-items: start;
         }
 
-        th {
-            background: #2a5298;
-            color: white;
+        .form-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid var(--border);
         }
 
-        .whatsapp {
+        .form-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 22px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 14px;
+            font-family: 'Barlow', sans-serif;
+            color: var(--text-dark);
+            background: var(--gray-light);
+            transition: border-color 0.2s, background 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--navy);
+            background: var(--white);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 90px; }
+
+        .btn-submit {
+            background: var(--navy);
+            color: var(--white);
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Barlow', sans-serif;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover { background: var(--blue-btn); }
+
+        .table-card {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-card-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .btn-load {
+            background: var(--gray-light);
+            color: var(--navy);
+            border: 1px solid var(--border);
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Barlow', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-load:hover { background: var(--border); }
+
+        .data-table { width: 100%; border-collapse: collapse; }
+
+        .data-table th {
+            background: #f0f4fa;
+            color: var(--navy);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 12px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table td {
+            padding: 13px 18px;
+            font-size: 13px;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table tr:hover td { background: var(--gray-light); }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* TOAST */
+        .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 90px;
+            right: 24px;
+            padding: 14px 22px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            z-index: 300;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #25a244; }
+        .toast.error { background: #dc2626; }
+
+        /* WHATSAPP */
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
             background: #25D366;
             color: white;
-            padding: 15px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-decoration: none;
+            box-shadow: 0 4px 14px rgba(37,211,102,0.4);
+            z-index: 200;
+            transition: transform 0.2s;
+        }
+        .whatsapp-fab:hover { transform: scale(1.08); }
+        .whatsapp-fab svg { width: 26px; height: 26px; fill: white; }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            nav { padding: 0 20px; }
+            .hero, .services-section, .projects-section, .cta-banner,
+            .services-hero, .specialized, .stats-bar, .requests-page { padding-left: 20px; padding-right: 20px; }
+            .hero, .services-hero-inner { flex-direction: column; }
+            .services-grid, .spec-grid { grid-template-columns: 1fr; }
+            .service-card.featured { grid-row: auto; aspect-ratio: 16/9; }
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+            .two-col { grid-template-columns: 1fr; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .ready-cta { margin: 20px; flex-direction: column; }
+            .ready-cta-btns { flex-wrap: wrap; }
+            .section-header { flex-direction: column; gap: 8px; }
+            .section-subtitle { text-align: left; max-width: 100%; }
+            .cta-banner { flex-direction: column; }
         }
     </style>
 </head>
-
 <body>
 
-<header>
-    Vigneshwara Enterprises
-</header>
+<!-- NAV -->
+<nav>
+    <a class="nav-logo" href="#" onclick="showPage('home');return false;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        VIGNESHAWARA
+    </a>
+    <ul class="nav-links">
+        <li><a href="#" id="nav-home" class="active" onclick="showPage('home');return false;">Home</a></li>
+        <li><a href="#" id="nav-services" onclick="showPage('services');return false;">Services</a></li>
+        <li><a href="#" id="nav-requests" onclick="showPage('requests');return false;">Requests</a></li>
+        <li><a href="#" class="btn-quote" onclick="showPage('requests');return false;">Get Quote</a></li>
+    </ul>
+</nav>
 
-<div class="location">
-    📍 Hyderabad | 📞 +91 9550804676
+<!-- ═══════════ HOME PAGE ═══════════ -->
+<div id="page-home" class="page active">
+
+    <section class="hero">
+        <div class="hero-left">
+            <span class="badge-label">Industrial Precision</span>
+            <h1>Architectural<br>Fortification.</h1>
+            <p>Vigneshawara Enterprises provides elite waterproofing solutions for the modern landscape. We protect your structural integrity with high-grade industrial membranes and scientific precision.</p>
+            <div class="hero-btns">
+                <button class="btn-primary" onclick="showPage('requests')">Protect Your Structure</button>
+                <button class="btn-outline" onclick="showPage('services')">Explore Services</button>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-img-wrap">
+                <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80" alt="Modern architecture" />
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <div class="section-header">
+            <span class="section-title">Expert Solutions for Every Surface</span>
+            <p class="section-subtitle">Preventative engineering that safeguards your investments against moisture, leakage, and structural decay.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                </div>
+                <h3>Terrace &amp; Rooftop</h3>
+                <p>High-performance membrane systems designed for UV resistance and thermal stability.</p>
+                <a class="learn-more" href="#" onclick="showPage('services');return false;">LEARN MORE →</a>
+            </div>
+            <div class="service-card featured">
+                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Waterproofing work" />
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                </div>
+                <h3>Basement &amp; Foundation</h3>
+                <p>Positive and negative side waterproofing to prevent capillary rise and groundwater ingress.</p>
+                <a class="learn-more" href="#" onclick="showPage('services');return false;">Learn More →</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                </div>
+                <h3>External Wall Protection</h3>
+                <p>High-build elastomeric coatings that bridge hairline cracks with deep hydro resistance.</p>
+                <a class="learn-more" href="#" onclick="showPage('services');return false;">View Technical Specs →</a>
+            </div>
+            <div class="service-card stp-card">
+                <div class="service-icon" style="background:#dce8f7;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>
+                </div>
+                <h3>STP &amp; Water Tank Coating</h3>
+                <p>Specialized epoxy and crystalline coatings for potable water storage and sewage treatment plants.</p>
+                <div class="tags">
+                    <span class="tag">Non-Toxic</span>
+                    <span class="tag">Chemical Resistant</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CURRENT PROJECTS -->
+    <section class="projects-section">
+        <div class="section-header">
+            <span class="section-title">Current Projects</span>
+            <p class="section-subtitle">Ongoing waterproofing works across Hyderabad.</p>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0e2150" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                </div>
+                <div class="project-status">● Active</div>
+                <h3>Skyline Veda</h3>
+                <p>Terrace &amp; external wall waterproofing</p>
+            </div>
+            <div class="project-card">
+                <div class="project-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0e2150" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                </div>
+                <div class="project-status">● Active</div>
+                <h3>Myfair</h3>
+                <p>Basement &amp; foundation waterproofing</p>
+            </div>
+            <div class="project-card">
+                <div class="project-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0e2150" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                </div>
+                <div class="project-status">● Active</div>
+                <h3>Myhome</h3>
+                <p>STP &amp; water tank coating</p>
+            </div>
+            <div class="project-card">
+                <div class="project-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0e2150" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                </div>
+                <div class="project-status">● Active</div>
+                <h3>Anvitha Apartments</h3>
+                <p>Complete waterproofing solution</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar" style="background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+        <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">Years Experience</div></div>
+        <div class="stat-item"><div class="stat-num">38</div><div class="stat-label">Projects Sealed</div></div>
+        <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">Year Warranty</div></div>
+        <div class="stat-item" style="border-right:none;"><div class="stat-num">100%</div><div class="stat-label">Zero Leakage</div></div>
+    </div>
+
+    <!-- CTA -->
+    <section class="cta-banner">
+        <div>
+            <h2>Need a Custom Solution?</h2>
+            <p>Every structure has unique challenges. Our engineering team provides detailed site analysis and customized waterproofing protocols for complex architectural requirements.</p>
+        </div>
+        <button class="btn-white" onclick="showPage('requests')">Request a Quote</button>
+    </section>
+
 </div>
 
-<div class="hero">
-    <h1>Protect Your Home from Water Damage</h1>
-    <p>Roof | Basement | Bathroom Waterproofing</p>
+<!-- ═â═════ SERVICES PAGE ═══════════ -->
+<div id="page-services" class="page services-page">
+
+    <section class="services-hero">
+        <span class="badge-label" style="margin-bottom:10px;">Our Expertise</span>
+        <div class="services-hero-inner">
+            <div class="services-hero-left">
+                <h1>Architectural<br>Grade Protection.</h1>
+                <p>Vigneshawara Enterprises provides industrial-strength waterproofing systems designed to withstand the mt extreme environmental pressures. Our solutions are engineered for longevity and absolute structural integrity.</p>
+            </div>
+            <div class="services-hero-right">
+                <div class="hero-img-services">
+                    <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=80" alt="Architecture" />
+                </div>
+                <div class="warranty-badge">
+                    <div class="num">10+</div>
+                    <div class="label">Years Warranty</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="specialized">
+        <div class="section-header">
+            <span class="section-title">Specialized Solutions</span>
+            <p class="section-subtitle">Select a service category to view technical specifications and specialized application methods.</p>
+        </div>
+        <div class="spec-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                </div>
+                <h3>Terrace Waterproofing</h3>
+                <p>Multi-layer liquid applied membrane systems with thermal insulation for exposed rooftops.</p>
+                <a class="learn-more" href="#">Learn More →</a>
+            </div>
+            <div class="service-card featured">
+                <img src="https://images.unspla.com/photo-1504307651254-35680f356dfd?w=700&q=80" alt="Waterproofing" />
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                </div>
+                <h3>Basement &amp; Foundation</h3>
+                <p>Positive and negative side waterproofing to prevent capillary rise and groundwater ingress.</p>
+                <a class="learn-more" href="#">Learn More →</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                </div>
+                <h3>External Wall Protection</h3>
+                <p>High-build elastomeric coatings that bridge hrline cracks with deep hydro resistance.</p>
+                <a class="learn-more" href="#">View Technical Specs →</a>
+            </div>
+            <div class="service-card stp-card">
+                <div class="service-icon" style="background:#dce8f7;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/></svg>
+                </div>
+                <h3>STP &amp; Water Tank Coating</h3>
+                <p>Spialized epoxy and crystalline coatings. Chemical resistant and non-toxic formulations.</p>
+                <div class="tags">
+                    <span class="tag">Non-Toxic</span>
+                    <span class="tag">Chemical Resistant</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-bar" style="background: var(--gray-light);">
+        <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label">Years Experience</div></div>
+        <div class="stat-item"><div class="stat-num">38</div><div class="stat-label">Projects Sealed</div></div>
+        <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">Year Warranty</div></div>
+        <div class="stat-item" style="border-right:none;"><div class="stat-num">100%</div><div class="stat-label">Zero Leakage</div></div>
+    </div>
+
+    <div class="ready-cta">
+        <div>
+            <h2>Ready to fortify your property?</h2>
+            <p>Schedule a professional site audit today and receive a detailed waterproofing roadmap and quotation.</p>
+        </div>
+        <div class="ready-cta-btns">
+            <button class="btn-white" onclick="showPage('requests')">Get a Free Quote</button>
+            <button class="btn-outline-white" onclick="showPage('requests')">Contact Expert</button>
+        </div>
+    </div>
+
 </div>
 
-<div class="section">
-    <h2>Our Services</h2>
+<!-- ═══════════ REQUESTS PAGE ═══════════ -->
+<div id="page-requests" class="page">
+    <div class="requests-page">
+  ok a Service</h2>
+        <p class="subtitle">Our team will reach out within 24 hours to confirm your appointment.</p>
+        <div class="two-col">
+            <div class="form-card">
+                <h3>Submit a Request</h3>
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input id="name" type="text" placeholder="e.g. Ravi Kumar" required />
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input id="phone" type="tel" placeholder="+91 98765 43210" required />
+                </div>
+                <div class="form-group">
+                    <label>Describe your issue</label>
+                    <textarea id="issue" placeholder="e.g. Roof leakage in 2nd floor, approx 200 sqft..."></textarea>
+                </div>
+                <button class="btn-submit" onclick="submitForm()">Submit Request</button>
+            </div>
 
-    <div class="services">
-        <div class="card">
-            <h3>Roof Waterproofing</h3>
-            <p>Leak-proof solutions for long-lasting roofs</p>
-        </div>
-
-        <div class="card">
-            <h3>Basement Waterproofing</h3>
-            <p>Keep your basement dry & safe</p>
-        </div>
-
-        <div class="card">
-            <h3>Bathroom Sealing</h3>
-            <p>Prevent seepage and moisture issues</p>
+            <div class="table-card">
+                <div class="table-card-header">
+                    <h3>Customer Requests</h3>
+                    <button class="btn-load" onclick="loadRequests()">Load Requests</button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th><th>Name</th><th>Phone</th><th>Issue</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requests-body">
+                            <tr><td colspan="4" class="empty-state">Click "Load Requests" to view submissions</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="section">
-    <h2>Book a Service</h2>
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
 
-    <form onsubmit="event.preventDefault(); submitForm();">
-        <input id="name" placeholder="Your Name" required />
-        <input id="phone" placeholder="Phone Number" required />
-        <textarea id="issue" placeholder="Describe your issue"></textarea>
-        <button type="submit">Submit Request</button>
-    </form>
-</div>
-
-<div class="section">
-    <h2>Customer Requests</h2>
-    <button onclick="loadRequests()">Load Requests</button>
-
-    <table id="table">
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Issue</th>
-        </tr>
-    </table>
-</div>
-
-<!-- WhatsApp Button -->
-<a class="whatsapp" href="https://wa.me/919550804676" target="_blank">
-    💬
+<!-- WhatsApp FAB -->
+<a class="whatsapp-fab" href="https://wa.me/919550804676" target="_blank" title="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    </svg>
 </a>
 
 <script>
-async function submitForm() {
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const issue = document.getElementById("issue").value;
-
-    try {
-        const res = await fetch("http://localhost:8000/submit", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name, phone, issue })
-        });
-
-        const data = await res.json();
-        alert(data.message);
-
-    } catch (err) {
-        alert("Backend not reachable ❌");
+    function showPage(name) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + name).classList.add('active');
+        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+        const navEl = document.getElementById('nav-' + name);
+        if (navEl) navEl.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-}
 
-async function loadRequests() {
-    const res = await fetch("http://localhost:8000/requests");
-    const data = await res.json();
+    function showToast(message, type) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = 'toast ' + type + ' show';
+        setTimeout(() => { toast.className = 'toast'; }, 3500);
+    }
 
-    const table = document.getElementById("table");
+    async function submitForm() {
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const issue = document.getElementById("issue").value.trim();
 
-    table.innerHTML = `
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Issue</th>
-        </tr>
-    `;
+        if (!name || !phone) {
+            showToast("Please fill in your name and phone number.", "error");
+            return;
+        }
 
-    data.data.forEach(row => {
-        table.innerHTML += `
-            <tr>
-                <td>${row[0]}</td>
-                <td>${row[1]}</td>
-                <td>${row[2]}</td>
-                <td>${row[3]}</td>
-            </tr>
-        `;
-    });
-}
+        try {
+            const res = await fetch("/api/submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, phone, issue })
+            });
+            const data = await res.json();
+            showToast(data.message || "Request submitted successfully!", "success");
+            document.getElementById("name").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("issue").value = "";
+        } catch (err) {
+            showToast("Submission failed. Please try again.", "error");
+        }
+    }
+
+    async function loadRequests() {
+        try {
+            const res = await fetch("/api/requests");
+            const data = await res.json();
+            const tbody = document.getElementById("requests-body");
+            if (!data.data || data.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No requests found.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.data.map(row => `
+                <tr>
+                    <td>${row[0]}</td>
+                    <td>${row[1]}</td>
+                    <td>${row[2]}</td>
+                    <td>${row[3]}</td>
+                </tr>
+            `).join('');
+        } catch (err) {
+            showToast("Failed to load requests. Please try again.", "error");
+        }
+    }
 </script>
 
 </body>
