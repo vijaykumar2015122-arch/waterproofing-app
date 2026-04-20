@@ -1,0 +1,55 @@
+name: CI - Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1️⃣ Get your code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2️⃣ Set dynamic version tag
+    - name: Set Image Tag
+      run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+
+    # 3️⃣ Login to DockerHub
+    - name: Login to DockerHub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    # 4️⃣ Build Backend
+    - name: Build Backend Image
+      run: |
+        docker build -t vijaym1999/waterproofing-backend:${IMAGE_TAG} ./backend
+
+    # 5️⃣ Push Backend
+    - name: Push Backend Image
+      run: |
+        docker push vijaym1999/waterproofing-backend:${IMAGE_TAG}
+
+    # 6️⃣ Tag backend as latest (optional)
+    - name: Tag Backend Latest
+      run: |
+        docker tag vijaym1999/waterproofing-backend:${IMAGE_TAG} vijaym1999/waterproofing-backend:latest
+        docker push vijaym1999/waterproofing-backend:latest
+
+    # 7️⃣ Build Frontend
+    - name: Build Frontend Image
+      run: |
+        docker build -t vijaym1999/waterproofing-frontend:${IMAGE_TAG} ./frontend
+
+    # 8️⃣ Push Frontend
+    - name: Push Frontend Image
+      run: |
+        docker push vijaym1999/waterproofing-frontend:${IMAGE_TAG}
+
+    # 9️⃣ Tag frontend as latest
+    - name: Tag Frontend Latest
+      run: |
+        docker tag vijaym1999/waterproofing-frontend:${IMAGE_TAG} vijaym1999/waterproofing-frontend:latest
+        docker push vijaym1999/waterproofing-frontend:latest
