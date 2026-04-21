@@ -5,7 +5,10 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'k8s/**'   # prevents infinite loop
+      - 'k8s/**'   # prevent infinite loop when YAML updates
+
+permissions:
+  contents: write   # REQUIRED for git push from CI
 
 jobs:
   build:
@@ -16,7 +19,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # 2️⃣ Set image tag
+    # 2️⃣ Set image tag (unique per commit)
     - name: Set Image Tag
       run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
 
@@ -36,17 +39,17 @@ jobs:
         docker build -t vijaym1999/waterproofing-frontend:${IMAGE_TAG} ./frontend
         docker push vijaym1999/waterproofing-frontend:${IMAGE_TAG}
 
-    # 6️⃣ Update Kubernetes YAML (VERY IMPORTANT)
+    # 6️⃣ Update Kubernetes deployment YAML (GitOps trigger)
     - name: Update manifests
       run: |
         sed -i "s|image: vijaym1999/waterproofing-backend:.*|image: vijaym1999/waterproofing-backend:${IMAGE_TAG}|g" k8s/base/backend-deployment.yaml
         sed -i "s|image: vijaym1999/waterproofing-frontend:.*|image: vijaym1999/waterproofing-frontend:${IMAGE_TAG}|g" k8s/base/frontend-deployment.yaml
 
-    # 7️⃣ Commit & Push changes
+    # 7️⃣ Commit & Push updated YAML back to GitHub
     - name: Commit changes
       run: |
         git config user.name "github-actions"
         git config user.email "actions@github.com"
         git add .
         git commit -m "update image tag to ${IMAGE_TAG}" || echo "No changes"
-        git push
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
