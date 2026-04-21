@@ -46,3 +46,5 @@ spec:
               name: backend-secret
               key: DB_PASSWORD
 
+        - name: APPINSIGHTS_CONNECTION_STRING
+          value: "InstrumentationKey=46e60640-562a-4bbf-834e-4717fae9dcc9;IngestionEndpoint=https://centralindia-0.in.applicationinsights.azure.com/;LiveEndpoint=https://centralindia.livediagnostics.monitor.azure.com/;ApplicationId=dd18984f-30d2-4dca-aee4-2cd4b462d8c6"
