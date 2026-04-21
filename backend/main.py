@@ -84,7 +84,7 @@ class Request(BaseModel):
 @app.get("/")
 def home():
     logger.info("Home API hit")
-    return {"message": "Backend running with DB 🚀"}
+    return {"message": "Backend running with App insights"}
 
 @app.post("/submit")
 def submit_request(req: Request):
