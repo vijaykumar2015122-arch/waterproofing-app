@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: vijaym1999/waterproofing-backend:v1   # 👈 use versioned image
+        image: vijaym1999/waterproofing-backend:anything   # 👈 use versioned image
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
