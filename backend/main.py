@@ -6,6 +6,8 @@ import time
 import os
 import logging
 
+print("🔥 APP STARTED WITH NEW CODE")
+
 # 🔥 App Insights setup (SAFE initialization)
 try:
     from opencensus.ext.azure.log_exporter import AzureLogHandler
@@ -14,19 +16,23 @@ try:
     connection_string = os.getenv("APPINSIGHTS_CONNECTION_STRING")
 
     if connection_string:
-        logger.addHandler(
-            AzureLogHandler(connection_string=connection_string)
-        )
+        handler = AzureLogHandler(connection_string=connection_string)
+        logger.addHandler(handler)
         logger.setLevel(logging.INFO)
-        logger.info("Application Insights configured successfully ✅")
+
+        print("✅ App Insights configured")
+        logger.info("Application Insights configured successfully")
+
     else:
         logger = logging.getLogger("fallback")
         logger.setLevel(logging.INFO)
-        logger.info("App Insights connection string not found ⚠️")
+        print("⚠️ App Insights connection string NOT found")
+        logger.info("App Insights connection string not found")
 
 except Exception as e:
     logger = logging.getLogger("fallback")
     logger.setLevel(logging.INFO)
+    print(f"❌ App Insights setup failed: {str(e)}")
     logger.error(f"App Insights setup failed: {str(e)}")
 
 app = FastAPI()
@@ -50,11 +56,11 @@ for i in range(10):
             user=os.getenv("DB_USER", "postgres"),
             password=os.getenv("DB_PASSWORD", "password")
         )
-        print("Connected to DB ✅")
+        print("✅ Connected to DB")
         logger.info("Connected to DB successfully")
         break
     except Exception as e:
-        print("DB not ready, retrying...", e)
+        print("❌ DB not ready, retrying...", e)
         logger.error(f"DB connection failed: {str(e)}")
         time.sleep(3)
 
@@ -83,14 +89,17 @@ class Request(BaseModel):
 # APIs
 @app.get("/")
 def home():
+    print("🔥 HOME API HIT")
     logger.info("Home API hit")
-    return {"message": "Backend running with App insights"}
+    return {"message": "Backend running with App Insights 🚀"}
 
 @app.post("/submit")
 def submit_request(req: Request):
+    print(f"🔥 SUBMIT API HIT: {req.name}")
     logger.info(f"Submit API called with name={req.name}")
 
     if not conn:
+        print("❌ Submit failed - DB not connected")
         logger.error("Submit failed - DB not connected")
         return {"error": "DB not connected"}
 
@@ -100,19 +109,23 @@ def submit_request(req: Request):
     )
     conn.commit()
 
+    print("✅ Data inserted into DB")
     logger.info("Data inserted successfully into DB")
     return {"message": "Saved to DB ✅"}
 
 @app.get("/requests")
 def get_requests():
+    print("🔥 GET REQUESTS API HIT")
     logger.info("Get requests API called")
 
     if not conn:
+        print("❌ Fetch failed - DB not connected")
         logger.error("Fetch failed - DB not connected")
         return {"error": "DB not connected"}
 
     cursor.execute("SELECT * FROM requests")
     data = cursor.fetchall()
 
+    print(f"✅ Fetched {len(data)} records")
     logger.info(f"Fetched {len(data)} records")
     return {"data": data}
