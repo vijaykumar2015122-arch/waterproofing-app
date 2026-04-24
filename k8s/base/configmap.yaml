@@ -5,4 +5,4 @@ metadata:
 data:
   DB_HOST: postgres
   DB_NAME: waterproofing
-  DB_USER: admin
+  DB_USER: postgres   
