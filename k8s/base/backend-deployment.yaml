@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: vijaym1999/waterproofing-backend:c5d7c75c4e94a798cc956d7b21d1c02de5208351
+        image: vijaym1999/waterproofing-backend:v2   # 👈 update image after build
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
@@ -48,3 +48,18 @@ spec:
 
         - name: APPINSIGHTS_CONNECTION_STRING
           value: "InstrumentationKey=46e60640-562a-4bbf-834e-4717fae9dcc9;IngestionEndpoint=https://centralindia-0.in.applicationinsights.azure.com/;LiveEndpoint=https://centralindia.livediagnostics.monitor.azure.com/;ApplicationId=dd18984f-30d2-4dca-aee4-2cd4b462d8c6"
+
+        # 🔥 Datadog APM ENV (NEW)
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+
+        - name: DD_SERVICE
+          value: backend
+
+        - name: DD_ENV
+          value: prod
+
+        - name: DD_VERSION
+          value: v1

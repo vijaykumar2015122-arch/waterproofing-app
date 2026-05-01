@@ -1,3 +1,7 @@
+# 🔥 Datadog APM (MUST be at top)
+from ddtrace import patch_all
+patch_all()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -8,7 +12,7 @@ import logging
 
 print("🔥 APP STARTED WITH NEW CODE")
 
-# App Insights setup
+# App Insights setup (kept as-is)
 try:
     from opencensus.ext.azure.log_exporter import AzureLogHandler
 
