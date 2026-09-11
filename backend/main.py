@@ -2,13 +2,14 @@
 from ddtrace import patch_all
 patch_all()
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import psycopg2
 import time
 import os
 import logging
+import httpx
 
 print("🔥 APP STARTED WITH NEW CODE")
 
@@ -82,6 +83,34 @@ class Request(BaseModel):
     name: str
     phone: str
     issue: str
+
+class ChatRequest(BaseModel):
+    message: str
+
+
+CHATBOT_SERVICE_URL = os.getenv(
+    "CHATBOT_SERVICE_URL",
+    "http://chatbot-service.chatbot.svc.cluster.local:8000"
+)
+
+
+@app.post("/chat")
+async def chat(req: ChatRequest):
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                f"{CHATBOT_SERVICE_URL}/chat",
+                json={"message": req.message}
+            )
+            response.raise_for_status()
+            return response.json()
+    except Exception as exc:
+        logger.exception("Chatbot request failed")
+        raise HTTPException(
+            status_code=502,
+            detail="Chatbot service unavailable"
+        ) from exc
+
 
 @app.get("/")
 def home():
