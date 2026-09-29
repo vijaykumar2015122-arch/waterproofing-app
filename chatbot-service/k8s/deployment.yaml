@@ -18,6 +18,17 @@ spec:
           image: vijaym1999/waterproofing-chatbot:58e46bd1cebbfc77c6f17ae5a695c02e4d4c7080
           ports:
             - containerPort: 8000
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_SERVICE
+              value: chatbot-service
+            - name: DD_ENV
+              value: prod
+            - name: DD_VERSION
+              value: v1
           readinessProbe:
             httpGet:
               path: /health
