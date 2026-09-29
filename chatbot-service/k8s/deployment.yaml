@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: chatbot-service
-          image: vijaym1999/waterproofing-chatbot:58e46bd1cebbfc77c6f17ae5a695c02e4d4c7080
+          image: vijaym1999/waterproofing-chatbot:7c4dbdc3edc73074e8983df8c9881d634852497b
           ports:
             - containerPort: 8000
           env:
