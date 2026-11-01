@@ -1,0 +1,63 @@
+# Tempo single-binary configuration for local KIND cluster
+
+replicas: 1
+
+tempo:
+  registry: docker.io
+  repository: grafana/tempo
+  tag: "3.1.1"
+  pullPolicy: IfNotPresent
+
+  # Local lab resource allocation
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  # Disable anonymous usage reporting
+  reportingEnabled: false
+
+  # Single-tenant local setup
+  multitenancyEnabled: false
+
+  # Trace retention
+  retention: 24h
+
+  # Trace ingestion receivers
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318"
+
+  # Local trace storage
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+      wal:
+        path: /var/tempo/wal
+
+# Tempo query UI is not needed; Grafana will query Tempo directly
+tempoQuery:
+  enabled: false
+
+# Internal Kubernetes Service
+service:
+  type: ClusterIP
+  protocol: TCP
+
+# Persistent storage for traces and WAL
+persistence:
+  enabled: true
+  enableStatefulSetAutoDeletePVC: false
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi

@@ -1,0 +1,103 @@
+name: Local Observability - Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/local-observability/**"
+      - ".github/workflows/local-observability-terraform.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: local-observability-terraform
+  cancel-in-progress: false
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.3
+
+      - name: Terraform Format Check
+        run: terraform -chdir=terraform/local-observability fmt -check -recursive
+
+      - name: Terraform Initialize
+        run: terraform -chdir=terraform/local-observability init -input=false -lockfile=readonly
+
+      - name: Terraform Validate
+        run: terraform -chdir=terraform/local-observability validate
+
+      - name: Generate Terraform Plan
+        run: terraform -chdir=terraform/local-observability plan -input=false -out=tfplan
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-observability-tfplan
+          path: terraform/local-observability/tfplan
+          retention-days: 1
+          if-no-files-found: error
+
+  terraform-apply:
+    name: Terraform Apply
+    needs: terraform-plan
+    runs-on: [self-hosted, Linux, X64]
+    environment: local-observability-approval
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.3
+
+      - name: Terraform Initialize
+        run: terraform -chdir=terraform/local-observability init -input=false -lockfile=readonly
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: local-observability-tfplan
+          path: terraform/local-observability
+
+      - name: Apply Approved Terraform Plan
+        run: terraform -chdir=terraform/local-observability apply -input=false tfplan
+
+      - name: Verify Kubernetes Namespace
+        run: |
+          export KUBECONFIG=/home/vijay/.kube/config
+          kubectl get namespace observability
+
+      - name: Verify Helm Releases
+        run: |
+          export KUBECONFIG=/home/vijay/.kube/config
+          helm list --namespace observability
+
+      - name: Inspect Observability Pods
+        run: |
+          export KUBECONFIG=/home/vijay/.kube/config
+          kubectl get pods -n observability -o wide
