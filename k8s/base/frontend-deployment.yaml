@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: vijaym1999/waterproofing-frontend:b1c801e4dd5b10eb2bf4320692a1ba5ab93af983
+        image: vijaym1999/waterproofing-frontend:9394eb0d0a1746b74f6154a58eb0c1ddfe2e920d
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
