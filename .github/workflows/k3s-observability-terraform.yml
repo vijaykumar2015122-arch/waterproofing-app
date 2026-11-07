@@ -1,0 +1,104 @@
+name: K3s Observability - Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/k3s-observability/**"
+      - ".github/workflows/k3s-observability-terraform.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: k3s-observability-terraform
+  cancel-in-progress: false
+
+jobs:
+  terraform-plan:
+    name: K3s Terraform Plan
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.3
+          terraform_wrapper: false
+
+      - name: Initialize
+        run: terraform -chdir=terraform/k3s-observability init -input=false -lockfile=readonly
+
+      - name: Format Check
+        run: terraform -chdir=terraform/k3s-observability fmt -check -recursive
+
+      - name: Validate
+        run: terraform -chdir=terraform/k3s-observability validate
+
+      - name: Plan
+        env:
+          KUBECONFIG: /home/vijay/.kube/k3s-config
+        run: terraform -chdir=terraform/k3s-observability plan -input=false -out=tfplan
+
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: k3s-observability-tfplan
+          path: terraform/k3s-observability/tfplan
+          retention-days: 1
+          if-no-files-found: error
+
+  terraform-apply:
+    name: K3s Terraform Apply
+    needs: terraform-plan
+    runs-on: [self-hosted, Linux, X64]
+    environment: k3s-observability-approval
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.3
+          terraform_wrapper: false
+
+      - name: Initialize
+        run: terraform -chdir=terraform/k3s-observability init -input=false -lockfile=readonly
+
+      - name: Download Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: k3s-observability-tfplan
+          path: terraform/k3s-observability
+
+      - name: Apply Approved Plan
+        env:
+          KUBECONFIG: /home/vijay/.kube/k3s-config
+        run: terraform -chdir=terraform/k3s-observability apply -input=false tfplan
+
+      - name: Verify Deployment
+        env:
+          KUBECONFIG: /home/vijay/.kube/k3s-config
+        run: |
+          kubectl get nodes
+          kubectl get namespace observability
+          helm list --namespace observability
+          kubectl get pods -n observability -o wide
+          kubectl get pvc -n observability

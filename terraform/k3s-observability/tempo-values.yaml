@@ -1,0 +1,50 @@
+replicas: 1
+
+tempo:
+  registry: docker.io
+  repository: grafana/tempo
+  tag: "3.1.1"
+  pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+  reportingEnabled: false
+  multitenancyEnabled: false
+  retention: 24h
+
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: "0.0.0.0:4317"
+        http:
+          endpoint: "0.0.0.0:4318"
+
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+      wal:
+        path: /var/tempo/wal
+
+tempoQuery:
+  enabled: false
+
+service:
+  type: ClusterIP
+  protocol: TCP
+
+persistence:
+  enabled: true
+  enableStatefulSetAutoDeletePVC: false
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
