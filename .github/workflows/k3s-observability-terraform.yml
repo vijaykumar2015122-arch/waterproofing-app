@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "terraform/k3s-observability/**"
+      - "terraform/local-observability/**"
       - ".github/workflows/k3s-observability-terraform.yml"
   workflow_dispatch:
 
@@ -37,24 +37,24 @@ jobs:
           terraform_wrapper: false
 
       - name: Initialize
-        run: terraform -chdir=terraform/k3s-observability init -input=false -lockfile=readonly
+        run: terraform -chdir=terraform/local-observability init -input=false -lockfile=readonly
 
       - name: Format Check
-        run: terraform -chdir=terraform/k3s-observability fmt -check -recursive
+        run: terraform -chdir=terraform/local-observability fmt -check -recursive
 
       - name: Validate
-        run: terraform -chdir=terraform/k3s-observability validate
+        run: terraform -chdir=terraform/local-observability validate
 
       - name: Plan
         env:
           KUBECONFIG: /home/vijay/.kube/k3s-config
-        run: terraform -chdir=terraform/k3s-observability plan -input=false -out=tfplan
+        run: terraform -chdir=terraform/local-observability plan -input=false -out=tfplan
 
       - name: Upload Plan
         uses: actions/upload-artifact@v4
         with:
           name: k3s-observability-tfplan
-          path: terraform/k3s-observability/tfplan
+          path: terraform/local-observability/tfplan
           retention-days: 1
           if-no-files-found: error
 
@@ -80,18 +80,18 @@ jobs:
           terraform_wrapper: false
 
       - name: Initialize
-        run: terraform -chdir=terraform/k3s-observability init -input=false -lockfile=readonly
+        run: terraform -chdir=terraform/local-observability init -input=false -lockfile=readonly
 
       - name: Download Plan
         uses: actions/download-artifact@v4
         with:
           name: k3s-observability-tfplan
-          path: terraform/k3s-observability
+          path: terraform/local-observability
 
       - name: Apply Approved Plan
         env:
           KUBECONFIG: /home/vijay/.kube/k3s-config
-        run: terraform -chdir=terraform/k3s-observability apply -input=false tfplan
+        run: terraform -chdir=terraform/local-observability apply -input=false tfplan
 
       - name: Verify Deployment
         env:

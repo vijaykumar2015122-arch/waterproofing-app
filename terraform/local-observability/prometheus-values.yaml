@@ -1,11 +1,9 @@
-
 prometheus:
   enabled: true
 
   prometheusSpec:
     retention: 2d
     retentionSize: 700MB
-
     replicas: 1
     shards: 1
 
@@ -40,11 +38,40 @@ grafana:
 
   resources:
     requests:
-      cpu: 50m
+      cpu: 100m
       memory: 256Mi
     limits:
-      cpu: 300m
-      memory: 512Mi
+      cpu: 500m
+      memory: 768Mi
+
+  startupProbe:
+    httpGet:
+      path: /api/health
+      port: grafana
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 36
+
+  readinessProbe:
+    httpGet:
+      path: /api/health
+      port: grafana
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+
+  livenessProbe:
+    httpGet:
+      path: /api/health
+      port: grafana
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
 
 alertmanager:
   enabled: false
+
+prometheus-node-exporter:
+  hostRootFsMount:
+    enabled: true
+    mountPropagation: None

@@ -32,7 +32,7 @@ config:
       send_batch_size: 1024
 
   exporters:
-    otlp_grpc:
+    otlp:
       endpoint: tempo.observability.svc.cluster.local:4317
       tls:
         insecure: true
@@ -53,7 +53,7 @@ config:
           - memory_limiter
           - batch
         exporters:
-          - otlp_grpc
+          - otlp
       logs: null
       metrics: null
 
@@ -75,15 +75,37 @@ ports:
 
   jaeger-compact:
     enabled: false
-
   jaeger-grpc:
     enabled: false
-
   jaeger-thrift:
     enabled: false
-
   zipkin:
     enabled: false
-
   metrics:
     enabled: false
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 13133
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 13133
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
