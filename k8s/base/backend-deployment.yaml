@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: vijaym1999/waterproofing-backend:9394eb0d0a1746b74f6154a58eb0c1ddfe2e920d
+        image: vijaym1999/waterproofing-backend:f47dad806ee4470ae9ae2d34399f3e715e826736
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8000
